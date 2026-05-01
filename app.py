@@ -26,7 +26,7 @@ motor2 = Motor(forward=4, backward=14)
 motor3 = Motor(forward=23, backward=24)
 motor4 = Motor(forward=15, backward=18)
 speed = 0.8
-hornSound = '/home/user/Desktop/rc_car_ieee-main/Explosion1.ogg'
+hornSound = '/home/user/Desktop/ChipCar/Explosion1.ogg'
 cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
 
