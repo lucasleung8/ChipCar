@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>RC Car - Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter" rel="stylesheet">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <meta property="og:title" content="RC Car"/>
+  <meta property="og:description" content="ChipCar, a live RC car made by the McMaster IEEE Raspberry Pi team."/>
+  <meta property="og:image" content="https://chipcar.cc/static/ieee-mcmaster-logo.png"/>
+  <meta property="og:url" content="https://chipcar.cc"/>
+  <meta property="og:type" content="website"/>
+
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background: #111;
+      gap: 12px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .row {
+      display: flex;
+      margin: 1rem;
+    }
+
+    input {
+      color: white;
+      height: 100%;
+      width: 100%;
+      padding: 1rem;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      background-color: #444;
+      appearance: none;
+      border: 0px;
+      border-radius: 4px;
+    }
+
+    input[type="submit"]{
+      background-color: #4ea6ff;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:active,
+    input[type="submit"].pressed {
+      background: #4796e5;
+    }
+
+    #failed_login{
+      color: #ff5b5b;
+    }
+
+  </style>
+</head>
+
+<body>
+<div>
+  <iframe width="350" height="300" src="https://www.youtube-nocookie.com/embed/WIRK_pGdIdA?si=w-SBmjfa6l7v3Grq&amp;controls=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
+  <form action='login' method='POST'>
+    <div class="row">
+      <input type='text' name='username' id='username' placeholder='Username' autofocus required />
+    </div>
+    <div class="row">
+      <input type='password' name='password' id='password' placeholder='Password' required />
+    </div>
+    <div class="row">
+      <input type='submit' name='submit' id="submit" value="Sign In"/>
+    </div>
+    <!-- display whether failed login attempt or correct login details but someone else is driving -->
+    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+      {% if messages %}
+        <div class="row">
+          <p id="failed_login"><strong>{{ messages[0] }}</strong></p>
+        </div>
+      {% endif %}
+    {% endwith %}
+  </form>
+
+</body>
+
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>RC Car - Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter" rel="stylesheet">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background: #111;
+      gap: 12px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .row {
+      display: flex;
+      margin: 1rem;
+    }
+
+    input,
+    p {
+      color: white;
+      padding: 1rem;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      background-color: #444;
+      appearance: none;
+      border: 0px;
+      border-radius: 4px;
+    }
+
+    #result {
+      background-color: transparent;
+    }
+
+    input[type="submit"] {
+      background-color: #4ea6ff;
+      cursor: pointer;
+    }
+
+    #result {
+      color: #ff5b5b;
+    }
+
+    input:active,
+    input.pressed {
+      background: #4796e5;
+    }
+
+    .logout_row {
+      padding-bottom: 20px;
+    }
+
+    #logout {
+      font-size: 1em;
+      color: whitesmoke;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="row">
+    <p id="name">Current users: {{ active_user['username'] }}</p>
+  </div>
+  <div class="row">
+
+    <form action='admin' method='POST'>
+      <div class="row">
+        <input type='submit' name='submit' id="submit" value="Kick all users" />
+      </div>
+    </form>
+  </div>
+
+  <div class="logout_row">
+    <a href="./logout" title="Log out" id="logout">Log out</a>
+  </div>
+
+</body>
+
+</html>

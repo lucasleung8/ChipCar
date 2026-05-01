@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>RC Car</title>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <meta property="og:title" content="RC Car"/>
+  <meta property="og:description" content="ChipCar, a live RC car made by the McMaster IEEE Raspberry Pi team."/>
+  <meta property="og:image" content="https://chipcar.cc/static/ieee-mcmaster-logo.png"/>
+  <meta property="og:url" content="https://chipcar.cc"/>
+  <meta property="og:type" content="website"/>
+  <script src="https://cdn.socket.io/4.8.3/socket.io.min.js"></script>
+
+
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background: #111;
+      font-family: sans-serif;
+      gap: 12px;
+    }
+
+    button {
+      width: 90px;
+      height: 90px;
+      font-size: 2rem;
+      background: #222;
+      color: #fff;
+      border: 2px solid #444;
+      border-radius: 8px;
+      cursor: pointer;
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    button:active,
+    button.pressed {
+      background: #444;
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .logout_row {
+      margin-top: auto;
+      padding-bottom: 20px;
+    }
+
+    #logout {
+      font-size: 1.5em;
+      color: whitesmoke;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="camera">
+    <img src="/video" />
+  </div>
+
+  <div class="row">
+    <button id="forward">▲</button>
+  </div>
+  <div class="row">
+    <button id="left">◀</button>
+    <button id="horn">🗣️</button>
+    <button id="right">▶</button>
+  </div>
+  <div class="row">
+    <button id="back">▼</button>
+  </div>
+
+  <div class="logout_row">
+    <a href="./logout" title="Log out" id="logout">Log out</a>
+  </div>
+
+
+  <script>
+    const forwardButton = document.getElementById("forward");
+    const leftButton = document.getElementById("left");
+    const hornButton = document.getElementById("horn");
+    const rightButton = document.getElementById("right");
+    const backButton = document.getElementById("back");
+    const socket = io({ transports: ['websocket']});
+    moving = false;
+    
+    socket.on('allowed', () => {
+      console.log('allowed to proceed, you are now driving');
+    });
+
+    socket.on('logout_signal', (data) => {
+      window.location.href = '/logout';
+      alert(data.reason);
+    });
+
+    // website sends sound signal to python server, with the body specifying the type of sound (horn, turn signal, etc.)
+    function sound(type) {
+      fetch('/sound', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type })
+      });
+    }
+
+    // website sends move signal to python server, with the body specifying the direction (left, right, forward, etc.)
+    function send(direction) {
+      fetch('/move', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ direction })
+      });
+    }
+
+    hornButton.addEventListener('mousedown', () => { sound("horn"); moving = true; });
+    forwardButton.addEventListener('mousedown', () => { send("forward"); moving = true; })
+    leftButton.addEventListener('mousedown', () => { send("left"); moving = true; });
+    rightButton.addEventListener('mousedown', () => { send("right"); moving = true; });
+    backButton.addEventListener('mousedown', () => { send("back"); moving = true; });
+    window.addEventListener('mouseup', () => { send('stop'); moving = true; })
+    window.addEventListener('keydown', e => {
+      if (e.code == 'ArrowUp') {
+        send("forward");
+        moving = true;
+      }
+    });
+
+    window.addEventListener('keydown', e => {
+      if (e.code == 'ArrowLeft') {
+        send("left");
+        moving = true;
+      }
+    });
+
+    window.addEventListener('keydown', e => {
+      if (e.code == 'ArrowRight') {
+        send("right");
+        moving = true;
+      }
+    });
+
+    window.addEventListener('keydown', e => {
+      if (e.code == 'ArrowDown') {
+        send("back");
+        moving = true;
+      }
+    });
+
+    window.addEventListener('keydown', e => {
+      if (e.code == 'Space') {
+        sound("horn");
+      }
+    });
+
+    window.addEventListener('keyup', e => {
+      if (e.code != 'Space') {
+        send('stop');
+      }
+    });
+
+    // just in case
+    window.addEventListener('beforeunload', () => {
+      navigator.sendBeacon("/logout");
+    });
+
+  </script>
+
+</body>
+
+</html>
