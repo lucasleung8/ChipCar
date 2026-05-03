@@ -16,7 +16,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 load_dotenv()
 
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins="https://chipcar.cc", async_mode='threading')
+socketio = SocketIO(app, async_mode='threading')
 
 # Initialize motors, video, sounds, login
 factory = LGPIOFactory()
