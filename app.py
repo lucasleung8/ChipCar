@@ -150,7 +150,6 @@ def index():
 @login_required
 def adminPage():
     if flask.request.method == 'POST':
-        # subprocess.Popen(["pkill", "-9", "-f", "gunicorn"])
         socketio.emit('logout_signal', {'reason': f"An admin has kicked you out."})
         active_user['username'] = None
         motor.stop()
@@ -241,5 +240,4 @@ def handle_disconnect():
 
 
 if __name__ == '__main__':
-    # pls run run.sh instead if you can, its faster
     app.run(port=8000)
