@@ -211,7 +211,7 @@ def move():
         servo.value = 0
     return render_template('index.html')
 
-# web sockets be wildin -> once user has logged in and gotten to the index page
+# web sockets -> once user has logged in and gotten to the index page
 @socketio.on('connect')
 def handle_connect():
     if not current_user.is_authenticated:
@@ -230,7 +230,6 @@ def handle_connect():
 @socketio.on('disconnect')
 def handle_disconnect():
     # check if user is logged in before trying to access .id -> someone who connects but doesn't login and just closes the tab
-    # wont cause any errors
     if current_user.is_authenticated:
         if active_user['username'] == current_user.id:
             active_user['username'] = None
