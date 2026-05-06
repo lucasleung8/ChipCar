@@ -1,4 +1,4 @@
-# ChipCar-IEEE
+# ChipCar
 A full-stack remote control car controllable anywhere in the world, built by the Raspberry Pi team at McMaster to showcase in future workshops. Using a Raspberry Pi alongside Python, Flask, JavaScript, WebSockets (SocketIO) for real-time communication and user authentication, live video stream using OpenCV, sound system with a horn, multithreaded performance with gunicorn, and securely deployed via Cloudflare Tunnel. Try it at [chipcar.cc](https://chipcar.cc)!
 
 ## Build Instructions
